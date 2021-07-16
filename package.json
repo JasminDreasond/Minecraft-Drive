@@ -2,7 +2,11 @@
   "name": "mine-drive",
   "version": "1.0.0",
   "description": "Minecraft Auto Save Google Drive",
+  "productName": "Mine Drive",
+  "copyright": "JasminDreasond (Yasmin Seidel)",
+  "companyName": "Puddy Club",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +15,7 @@
     "url": "git+https://github.com/JasminDreasond/Minecraft-Google-Drive.git"
   },
   "author": "JasminDreasond (Yasmin Seidel)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/JasminDreasond/Minecraft-Google-Drive/issues"
   },
@@ -19,5 +23,13 @@
   "dependencies": {
     "ini": "^2.0.0",
     "scriptserver": "^1.2.0"
+  },
+  "tinyBuilder": {
+    "filename": "mine_drive.exe",
+    "icon": {
+      "main": "icon.ico",
+      "install": "icon.ico",
+      "pc": "icon.ico"
+    }
   }
 }
