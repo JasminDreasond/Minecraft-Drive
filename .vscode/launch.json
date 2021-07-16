@@ -12,6 +12,12 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\index.js"
+        },
+        {
+            "command": "pkg ./index.js",
+            "name": "Deploy PKG",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

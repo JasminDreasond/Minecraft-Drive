@@ -31,5 +31,8 @@
       "install": "icon.ico",
       "pc": "icon.ico"
     }
+  },
+  "devDependencies": {
+    "pkg": "^5.3.0"
   }
 }
