@@ -12,6 +12,7 @@ console.log(`App Path: ${rootPath}`);
 console.log(`Loading Config...`);
 const tinyCfg = ini.parse(fs.readFileSync(path.join(rootPath, './mine-drive.ini'), 'utf-8'));
 if (typeof tinyCfg.autobackupminutes !== "string" && typeof tinyCfg.autobackupminutes !== "number") { tinyCfg.autobackupminutes = 30; }
+tinyCfg.drivepath = tinyCfg.drivepath.replace('{OneDrive}', process.env.OneDrive);
 console.log(`Config Loaded!`);
 
 // Module Config
