@@ -55,7 +55,6 @@ console.log(`Starting Minecraft Server...`);
 minecraft.server = new ScriptServer(config);
 minecraft.server.start();
 
-
 // ON Death
 ON_DEATH(async function (signal, err) {
 
