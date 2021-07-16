@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/JasminDreasond/Minecraft-Google-Drive/issues"
   },
-  "homepage": "https://github.com/JasminDreasond/Minecraft-Google-Drive#readme"
+  "homepage": "https://github.com/JasminDreasond/Minecraft-Google-Drive#readme",
+  "dependencies": {
+    "ini": "^2.0.0"
+  }
 }
