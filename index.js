@@ -7,6 +7,7 @@ const ScriptServer = require('scriptserver');
 const rootPath = path.dirname(process.execPath);
 const tinyCfg = ini.parse(fs.readFileSync(path.join(rootPath, './mine-drive.ini'), 'utf-8'));
 
+// Module Config
 const config = {
     core: {
         jar: tinyCfg.jar,
@@ -14,6 +15,19 @@ const config = {
         rcon: tinyCfg.rcon
     }
 };
+
+// Custom Config
+if (tinyCfg.custom) {
+
+    // String
+    if (typeof tinyCfg.custom === "string") {
+        tinyCfg.custom = JSON.parse(tinyCfg.custom);
+    }
+
+    // Object
+    for (const item in tinyCfg.custom) { config[item] = tinyCfg.custom[item]; }
+
+}
 
 // Server
 const server = new ScriptServer(config);
