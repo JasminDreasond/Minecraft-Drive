@@ -37,4 +37,4 @@ try { customIndex = require(path.join(rootPath, './mine-drive.js')); } catch (er
 if (typeof customIndex === "function") { customIndex(minecraft); }
 
 // Start Server
-minecraft.server = new ScriptServer(config)
+minecraft.server = new ScriptServer(config);
