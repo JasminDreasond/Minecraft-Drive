@@ -112,7 +112,7 @@ minecraft.server = new ScriptServer(config);
 createZipBackup(function () {
 
     // Start Auto Backup
-    setInterval(function () { createZipBackup(); return; }, Number(tinyCfg.autobackupminutes));
+    setInterval(function () { createZipBackup(); return; }, Number(60000 * Number(tinyCfg.autobackupminutes)));
 
     // Complete
     minecraft.server.start();
