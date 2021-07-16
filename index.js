@@ -29,7 +29,7 @@ if (tinyCfg.custom) {
 }
 
 // Prepare Minecraft
-const minecraft = {};
+const minecraft = { config: config, path: rootPath };
 
 // Custom Start
 let customIndex = null;
