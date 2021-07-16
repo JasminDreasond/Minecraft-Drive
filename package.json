@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/JasminDreasond/Minecraft-Google-Drive#readme",
   "dependencies": {
+    "death": "^1.1.0",
     "ini": "^2.0.0",
     "scriptserver": "^1.2.0"
   },

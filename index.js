@@ -2,6 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 const ini = require('ini');
+const ON_DEATH = require('death');
 const ScriptServer = require('scriptserver');
 console.log('Starting App...');
 
@@ -52,3 +53,16 @@ if (typeof customIndex === "function") { customIndex(minecraft); console.log(`Cu
 // Start Server
 console.log(`Starting Minecraft Server...`);
 minecraft.server = new ScriptServer(config);
+minecraft.server.start();
+
+
+// ON Death
+ON_DEATH(async function (signal, err) {
+
+    // Closing Message
+    console.log(`Closing App: ${signal}`);
+    if (err) { console.error(err); }
+    await minecraft.server.stop();
+    return;
+
+});
