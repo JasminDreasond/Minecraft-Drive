@@ -5,7 +5,7 @@ const ini = require('ini');
 const ON_DEATH = require('death');
 const ScriptServer = require('scriptserver');
 const moment = require('moment');
-const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}] ${value}`; };
+const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}]: ${value}`; };
 console.log(consoleGenerator('Mine-Drive', 'Starting App...'));
 
 // Files
