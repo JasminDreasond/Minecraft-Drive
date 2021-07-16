@@ -107,7 +107,15 @@ const createZipBackup = function (callback) {
 // Start Server
 console.log(`Starting Minecraft Server...`);
 minecraft.server = new ScriptServer(config);
-createZipBackup(function () { minecraft.server.start(); return; });
+createZipBackup(function () {
+
+    // Start Auto Backup
+
+    // Complete
+    minecraft.server.start(); 
+    return; 
+
+});
 
 // ON Death
 ON_DEATH(async function (signal, err) {
