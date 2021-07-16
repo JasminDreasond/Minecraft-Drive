@@ -1,5 +1,4 @@
 // Modules
-const package = require('./package.json');
 const path = require('path');
 const fs = require('fs');
 const ini = require('ini');
@@ -29,10 +28,13 @@ if (tinyCfg.custom) {
 
 }
 
-// Server
-const server = new ScriptServer(config);
+// Prepare Minecraft
+const minecraft = {};
 
 // Custom Start
 let customIndex = null;
 try { customIndex = require(path.join(rootPath, './mine-drive.js')); } catch (err) { customIndex = null; }
-if (typeof customIndex === "function") { customIndex(server); }
+if (typeof customIndex === "function") { customIndex(minecraft); }
+
+// Start Server
+minecraft.server = new ScriptServer(config)
