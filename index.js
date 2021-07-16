@@ -50,25 +50,9 @@ let customIndex = null;
 try { customIndex = require(path.join(rootPath, './mine-drive.js')); } catch (err) { customIndex = null; }
 if (typeof customIndex === "function") { customIndex(minecraft); console.log(`Custom JS File started!`); } else { console.log(`Custom JS File not found!`); }
 
-// Start Server
-console.log(`Starting Minecraft Server...`);
-minecraft.server = new ScriptServer(config);
-minecraft.server.start();
-
-// ON Death
-ON_DEATH(async function (signal, err) {
-
-    // Closing Message
-    console.log(`Closing App: ${signal}`);
-    if (err) { console.error(err); }
-    await minecraft.server.stop();
-    return;
-
-});
-
 // Google Drive Script
 const archiver = require('archiver');
-const createZipBackup = function () {
+const createZipBackup = function (callback) {
 
     // Preparing Backup
     console.log('Backup - Starting Backup...');
@@ -87,6 +71,7 @@ const createZipBackup = function () {
     output.on('close', function () {
         console.log('Backup - ' + archive.pointer() + ' total bytes');
         console.log('Backup - archiver has been finalized and the output file descriptor has closed.');
+        if (typeof callback === "function") { callback(); }
         return;
     });
 
@@ -118,3 +103,20 @@ const createZipBackup = function () {
     return;
 
 };
+
+// Start Server
+console.log(`Starting Minecraft Server...`);
+minecraft.server = new ScriptServer(config);
+createZipBackup(function () { minecraft.server.start(); return; });
+
+// ON Death
+ON_DEATH(async function (signal, err) {
+
+    // Closing Message
+    console.log(`Closing App: ${signal}`);
+    if (err) { console.error(err); }
+    await minecraft.server.stop();
+    return;
+
+});
+
