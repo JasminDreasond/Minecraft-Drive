@@ -4,16 +4,18 @@ const fs = require('fs');
 const ini = require('ini');
 const ON_DEATH = require('death');
 const ScriptServer = require('scriptserver');
-console.log('Starting App...');
+const moment = require('moment');
+const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}] ${value}`; };
+console.log(consoleGenerator('Mine-Drive', 'Starting App...'));
 
 // Files
 const rootPath = path.dirname(process.execPath);
-console.log(`App Path: ${rootPath}`);
-console.log(`Loading Config...`);
+console.log(consoleGenerator('Mine-Drive', `App Path: ${rootPath}`));
+console.log(consoleGenerator('Mine-Drive', `Loading Config...`));
 const tinyCfg = ini.parse(fs.readFileSync(path.join(rootPath, './mine-drive.ini'), 'utf-8'));
 if (typeof tinyCfg.autobackupminutes !== "string" && typeof tinyCfg.autobackupminutes !== "number") { tinyCfg.autobackupminutes = 30; }
 tinyCfg.drivepath = tinyCfg.drivepath.replace('{OneDrive}', process.env.OneDrive);
-console.log(`Config Loaded!`);
+console.log(consoleGenerator('Mine-Drive', `Config Loaded!`));
 
 // Module Config
 const config = {
@@ -24,10 +26,10 @@ const config = {
     }
 };
 
-console.log(`Core Config of ScriptServer Loaded!`);
+console.log(consoleGenerator('Mine-Drive', `Core Config of ScriptServer Loaded!`));
 
 // Custom Config
-console.log(`Loading Custom Config...`);
+console.log(consoleGenerator('Mine-Drive', `Loading Custom Config...`));
 if (tinyCfg.custom) {
 
     // String
@@ -40,14 +42,14 @@ if (tinyCfg.custom) {
 
 }
 
-console.log(`Custom Config loaded!`);
+console.log(consoleGenerator('Mine-Drive', `Custom Config loaded!`));
 
 // Prepare Minecraft
 const minecraft = { config: config, path: rootPath };
-console.log(`Minecraft values ready!`);
+console.log(consoleGenerator('Mine-Drive', `Minecraft values ready!`));
 
 // Custom Start
-console.log(`Starting custom JS File...`);
+console.log(consoleGenerator('Mine-Drive', `Starting custom JS File...`));
 let customIndex = null;
 try { customIndex = require(path.join(rootPath, './mine-drive.js')); } catch (err) { customIndex = null; }
 if (typeof customIndex === "function") { customIndex(minecraft); console.log(`Custom JS File started!`); } else { console.log(`Custom JS File not found!`); }
@@ -57,36 +59,36 @@ const archiver = require('archiver');
 const createZipBackup = function (callback) {
 
     // Preparing Backup
-    console.log('Backup - Starting Backup...');
+    console.log(consoleGenerator('Mine-Drive', 'Starting Backup...'));
     var output = fs.createWriteStream(path.join(tinyCfg.drivepath, './' + tinyCfg.zipname + '.zip'));
     var archive = archiver('zip');
 
     // This event is fired when the data source is drained no matter what was the data source.
     // It is not part of this library but rather from the NodeJS Stream API.
     output.on('end', function () {
-        console.log('Backup - Data has been drained');
+        console.log(consoleGenerator('Mine-Drive', 'Data has been drained'));
         return
     });
 
     // listen for all archive data to be written
     // 'close' event is fired only when a file descriptor is involved
     output.on('close', function () {
-        console.log('Backup - ' + archive.pointer() + ' total bytes');
-        console.log('Backup - archiver has been finalized and the output file descriptor has closed.');
+        console.log(consoleGenerator('Mine-Drive', archive.pointer() + ' total bytes'));
+        console.log(consoleGenerator('Mine-Drive', 'Archiver has been finalized and the output file descriptor has closed.'));
         if (typeof callback === "function") { callback(); }
         return;
     });
 
     // good practice to catch this error explicitly
     archive.on('error', function (err) {
-        console.log('Backup - ERROR!');
+        console.log(consoleGenerator('Mine-Drive', 'ERROR!'));
         console.error(err);
         return;
     });
 
     // good practice to catch warnings (ie stat failures and other non-blocking errors)
     archive.on('warning', function (err) {
-        console.log('Backup - WARN!');
+        console.log(consoleGenerator('Mine-Drive', 'WARN!'));
         if (err.code === 'ENOENT') {
             console.warn(err);
         } else {
@@ -107,7 +109,7 @@ const createZipBackup = function (callback) {
 };
 
 // Start Server
-console.log(`Starting Minecraft Server...`);
+console.log(consoleGenerator('Mine-Drive', `Starting Minecraft Server...`));
 minecraft.server = new ScriptServer(config);
 createZipBackup(function () {
 
@@ -124,7 +126,7 @@ createZipBackup(function () {
 ON_DEATH(async function (signal, err) {
 
     // Closing Message
-    console.log(`Closing App: ${signal}`);
+    console.log(consoleGenerator('Mine-Drive', `Closing App: ${signal}`));
     if (err) { console.error(err); }
     await minecraft.server.stop();
     return;
