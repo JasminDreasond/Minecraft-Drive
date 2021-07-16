@@ -1,5 +1,5 @@
 {
-  "name": "minecraft-google-drive",
+  "name": "mine-drive",
   "version": "1.0.0",
   "description": "Minecraft Auto Save Google Drive",
   "main": "index.js",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JasminDreasond/Minecraft-Google-Drive#readme",
   "dependencies": {
-    "ini": "^2.0.0"
+    "ini": "^2.0.0",
+    "scriptserver": "^1.2.0"
   }
 }
