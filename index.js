@@ -11,6 +11,7 @@ const rootPath = path.dirname(process.execPath);
 console.log(`App Path: ${rootPath}`);
 console.log(`Loading Config...`);
 const tinyCfg = ini.parse(fs.readFileSync(path.join(rootPath, './mine-drive.ini'), 'utf-8'));
+if (typeof tinyCfg.autobackupminutes !== "string" && typeof tinyCfg.autobackupminutes !== "number") { tinyCfg.autobackupminutes = 30; }
 console.log(`Config Loaded!`);
 
 // Module Config
@@ -110,10 +111,11 @@ minecraft.server = new ScriptServer(config);
 createZipBackup(function () {
 
     // Start Auto Backup
+    setInterval(function () { createZipBackup(); return; }, Number(tinyCfg.autobackupminutes));
 
     // Complete
-    minecraft.server.start(); 
-    return; 
+    minecraft.server.start();
+    return;
 
 });
 
