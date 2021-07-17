@@ -5,6 +5,7 @@ const ini = require('ini');
 const ON_DEATH = require('death');
 const ScriptServer = require('scriptserver');
 const moment = require('moment');
+const backupStatus = { active: false };
 const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}]: ${value}`; };
 console.log(consoleGenerator('Mine-Drive', 'Starting App...'));
 
@@ -58,52 +59,61 @@ if (typeof customIndex === "function") { customIndex(minecraft); console.log(`Cu
 const archiver = require('archiver');
 const createZipBackup = function (callback) {
 
-    // Preparing Backup
-    console.log(consoleGenerator('Mine-Drive', 'Starting Backup...'));
-    var output = fs.createWriteStream(path.join(tinyCfg.drivepath, './' + tinyCfg.zipname + '.zip'));
-    var archive = archiver('zip');
+    // Active Start
+    if (!backupStatus.active) {
+        backupStatus.active = true;
 
-    // This event is fired when the data source is drained no matter what was the data source.
-    // It is not part of this library but rather from the NodeJS Stream API.
-    output.on('end', function () {
-        console.log(consoleGenerator('Mine-Drive', 'Data has been drained'));
-        return
-    });
+        // Preparing Backup
+        console.log(consoleGenerator('Mine-Drive', 'Starting Backup...'));
+        var output = fs.createWriteStream(path.join(tinyCfg.drivepath, './' + tinyCfg.zipname + '.zip'));
+        var archive = archiver('zip');
 
-    // listen for all archive data to be written
-    // 'close' event is fired only when a file descriptor is involved
-    output.on('close', function () {
-        console.log(consoleGenerator('Mine-Drive', archive.pointer() + ' total bytes'));
-        console.log(consoleGenerator('Mine-Drive', 'Archiver has been finalized and the output file descriptor has closed.'));
-        if (typeof callback === "function") { callback(); }
-        return;
-    });
+        // This event is fired when the data source is drained no matter what was the data source.
+        // It is not part of this library but rather from the NodeJS Stream API.
+        output.on('end', function () {
+            console.log(consoleGenerator('Mine-Drive', 'Data has been drained'));
+            return
+        });
 
-    // good practice to catch this error explicitly
-    archive.on('error', function (err) {
-        console.log(consoleGenerator('Mine-Drive', 'ERROR!'));
-        console.error(err);
-        return;
-    });
+        // listen for all archive data to be written
+        // 'close' event is fired only when a file descriptor is involved
+        output.on('close', function () {
+            console.log(consoleGenerator('Mine-Drive', archive.pointer() + ' total bytes'));
+            console.log(consoleGenerator('Mine-Drive', 'Archiver has been finalized and the output file descriptor has closed.'));
+            backupStatus.active = false;
+            if (typeof callback === "function") { callback(); }
+            return;
+        });
 
-    // good practice to catch warnings (ie stat failures and other non-blocking errors)
-    archive.on('warning', function (err) {
-        console.log(consoleGenerator('Mine-Drive', 'WARN!'));
-        if (err.code === 'ENOENT') {
-            console.warn(err);
-        } else {
+        // good practice to catch this error explicitly
+        archive.on('error', function (err) {
+            console.log(consoleGenerator('Mine-Drive', 'ERROR!'));
             console.error(err);
-        }
-    });
+            return;
+        });
 
-    // Pipe
-    archive.pipe(output);
+        // good practice to catch warnings (ie stat failures and other non-blocking errors)
+        archive.on('warning', function (err) {
+            console.log(consoleGenerator('Mine-Drive', 'WARN!'));
+            if (err.code === 'ENOENT') {
+                console.warn(err);
+            } else {
+                console.error(err);
+            }
+        });
 
-    // append files from a sub-directory, putting its contents at the root of archive
-    archive.directory(rootPath, false);
+        // Pipe
+        archive.pipe(output);
+
+        // append files from a sub-directory, putting its contents at the root of archive
+        archive.directory(rootPath, false);
+
+        // Final
+        archive.finalize();
+
+    }
 
     // Complete
-    archive.finalize();
     return;
 
 };
