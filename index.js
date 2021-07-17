@@ -55,7 +55,7 @@ const startServer = async function () {
     console.log(consoleGenerator('Mine-Drive', `Starting custom JS File...`));
     let customIndex = null;
     try { customIndex = require(path.join(rootPath, './mine-drive.js')); } catch (err) { customIndex = null; }
-    if (typeof customIndex === "function") { customIndex(minecraft); console.log(`Custom JS File started!`); } else { console.log(`Custom JS File not found!`); }
+    if (typeof customIndex === "function") { customIndex(minecraft); console.log(consoleGenerator('Mine-Drive', `Custom JS File started!`)); } else { console.log(consoleGenerator('Mine-Drive', `Custom JS File not found!`)); }
 
     // Google Drive Script
     const archiver = require('archiver');
