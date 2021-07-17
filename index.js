@@ -145,7 +145,22 @@ createZipBackup(function () {
 // Prepare Close
 const closeAwait = async () => {
 
+    // Wait
+    await new Promise(function (resolve) {
 
+        // Wait Backup
+        const awaitBackup = function () {
+            if (backupStatus.active) { setTimeout(() => { awaitBackup(); }, 1000); } else { resolve(); }
+            return;
+        };
+
+        // Complete
+        return;
+
+    });
+
+    // Complete
+    return;
 
 };
 
