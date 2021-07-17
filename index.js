@@ -142,6 +142,16 @@ createZipBackup(function () {
 
 });
 
+// Prepare Close
+const closeAwait = async () => {
+
+
+
+};
+
+process.on('exit', closeAwait);
+process.on('close', closeAwait);
+
 // ON Death
 ON_DEATH(async function (signal, err) {
 
@@ -149,6 +159,7 @@ ON_DEATH(async function (signal, err) {
     console.log(consoleGenerator('Mine-Drive', `Closing App: ${signal}`));
     if (err) { console.error(err); }
     await minecraft.server.stop();
+    await closeAwait();
     return;
 
 });
