@@ -123,23 +123,25 @@ const startServer = async function () {
     // Start Server
     console.log(consoleGenerator('Mine-Drive', `Starting Minecraft Server...`));
     minecraft.server = new ScriptServer(config);
-    minecraft.server.spawn.on('close', (code) => {
-        console.log(consoleGenerator('Mine-Drive', `Minecraft Server close all stdio with code ${code}.`));
-        createZipBackup();
-        return;
-    });
-    minecraft.server.spawn.on('exit', (code) => {
-        console.log(consoleGenerator('Mine-Drive', `Minecraft Server exited with code ${code}.`));
-        createZipBackup();
-        return;
-    });
     createZipBackup(function () {
 
         // Start Auto Backup
         setInterval(function () { createZipBackup(); return; }, Number(60000 * Number(tinyCfg.autobackupminutes)));
 
-        // Complete
+        // Starting Server
         minecraft.server.start();
+        minecraft.server.spawn.on('close', (code) => {
+            console.log(consoleGenerator('Mine-Drive', `Minecraft Server close all stdio with code ${code}.`));
+            createZipBackup();
+            return;
+        });
+        minecraft.server.spawn.on('exit', (code) => {
+            console.log(consoleGenerator('Mine-Drive', `Minecraft Server exited with code ${code}.`));
+            createZipBackup();
+            return;
+        });
+
+        // Complete
         return;
 
     });
