@@ -111,6 +111,16 @@ const createZipBackup = function (callback) {
 // Start Server
 console.log(consoleGenerator('Mine-Drive', `Starting Minecraft Server...`));
 minecraft.server = new ScriptServer(config);
+minecraft.server.spawn.on('close', (code) => {
+    console.log(consoleGenerator('Mine-Drive', `child process close all stdio with code ${code}`));
+    createZipBackup();
+    return;
+});
+minecraft.server.spawn.on('exit', (code) => {
+    console.log(consoleGenerator('Mine-Drive', `child process exited with code ${code}`));
+    createZipBackup();
+    return;
+});
 createZipBackup(function () {
 
     // Start Auto Backup
